@@ -1,5 +1,14 @@
 /// <reference types = "Cypress"/>
 
+import { mainPage } from "../page-objects/main-page"
+import { fullEpisodes } from "../page-objects/complete-episodes"
+import { collections } from "../page-objects/collections"
+
+
+const main = new mainPage
+const fullEp = new fullEpisodes
+const collectionPage = new collections
+
 describe('South Park Test', () => {
 
     beforeEach(() => {
@@ -8,31 +17,17 @@ describe('South Park Test', () => {
     })
 
     it('Selects Random Episode', () => {
-        cy.get('.menu-toggle').click()
-        cy.get('[data-testid="sub-nav-item_2"]').within(() => {
-            cy.get('.css-cqmi9v-Box').click()
-        })
-        cy.get('[data-display-name="sub-nav-list"]').first().within(() => {
-            cy.get('a[href="/random-episode"]').click()
-        })
+        main.selectRandomEp()
     })
 
 
     it('Selects an Episode from a specific Season', () => {
-        cy.get('.menu-toggle').click()
-        cy.get('[data-testid="sub-nav-item_2"]').click()
-        cy.get('[data-display-name="Button"]').contains('Episodios Completos').click() //It got to the Complete Episodes screen
-
-        cy.get('[data-testid="Dropdown"]').scrollIntoView().click()
-        cy.get('[data-testid="DropdownList"]').within(() => {
-            cy.get('[data-display-name="Link"]').contains('Temporada 13').click() //It selected the Season
-        })
-
-        cy.get('h3').contains('El Mapache').click()
+        main.selectSeason() //It got to the Complete Episodes screen
+        fullEp.selectSeason() //It selected the Season
     })
 
     it('Selects a Collection', () => {
-        cy.get('h2').contains('Colección: Best of Cartman').click() //It enters the best of cartman page, we still need to click a link on a parragraph
-        cy.get('[data-display-name="GenericText"]').contains("Best of Cartman").click()
+        main.selectCollection() //It enters the best of cartman page, we still need to click a link on a parragraph
+        collectionPage.selectCartman()
     })
 })
